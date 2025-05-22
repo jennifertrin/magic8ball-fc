@@ -1,0 +1,19 @@
+{
+    "frame": {
+      "version": "1",
+      "name": "Magic 8 Ball",
+      "iconUrl": "https://yoink.party/logo.png",
+      "homeUrl": "https://magic8ball.space",
+      "imageUrl": "https://yoink.party/framesV2/opengraph-image",
+      "buttonTitle": "🚩 Start",
+      "splashImageUrl": "https://yoink.party/logo.png",
+      "splashBackgroundColor": "#f5f0ec",
+      "requiredChains": [
+        "eip155:8453"
+      ],
+      "requiredCapabilities": [
+        "actions.signIn",
+        "wallet.getEvmProvider"
+      ]
+    }
+  }
