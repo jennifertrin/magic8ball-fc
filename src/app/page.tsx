@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import dynamic from 'next/dynamic';
 import Magic8Ball from '../components/Magic8Ball';
 
 export default function Home() {

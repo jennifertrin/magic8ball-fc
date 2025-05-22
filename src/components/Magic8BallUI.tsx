@@ -19,11 +19,11 @@ interface Magic8BallUIProps {
   showAnswer: boolean;
   isClient: boolean;
   staticParticles: Particle[];
-  ballRef: RefObject<HTMLDivElement>;
+  ballRef: RefObject<HTMLDivElement | null>;
   onShake: () => void;
   onKeyPress: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onShare: () => void;
-  onMint: () => void;
+  // onMint: () => void;
 }
 
 export default function Magic8BallUI({
@@ -39,7 +39,7 @@ export default function Magic8BallUI({
   onShake,
   onKeyPress,
   onShare,
-  onMint
+  // onMint
 }: Magic8BallUIProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-between bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden p-4">
@@ -164,12 +164,12 @@ export default function Magic8BallUI({
             >
               Share
             </button>
-            <button
+            {/* <button
               onClick={onMint}
               className="w-full px-6 py-3 text-base bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium rounded-full shadow-lg hover:shadow-xl"
             >
               Mint NFT
-            </button>
+            </button> */}
           </>
         )}
       </div>
