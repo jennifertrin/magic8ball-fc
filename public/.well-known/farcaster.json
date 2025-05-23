@@ -15,6 +15,9 @@
       "splashBackgroundColor": "#f5f0ec",
       "requiredChains": [
         "eip155:8453"
+      ],
+      "requiredCapabilities": [
+        "actions.composeCast"
       ]
     }
   }
