@@ -69,26 +69,24 @@ export default function Magic8BallUI({
       )}
 
       {/* Header */}
-      <div className="text-center z-10 mt-6">
-        <h1 className="text-4xl font-bold text-white mb-2">✨ MAGIC 8 BALL ✨</h1>
-        <p className="text-gray-300 text-sm">Ask a question and shake to reveal your destiny</p>
-      </div>
-
-      {/* Input */}
-      <div className="w-full max-w-md z-10 mt-4">
-        <input
-          type="text"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          onKeyPress={onKeyPress}
-          placeholder="What would you like to know?"
-          className="w-full px-6 py-4 text-base bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-          disabled={isShaking}
-        />
+      <div className="flex flex-col gap-2 items-center text-center z-10 pt-4">
+        <h1 className="flex text-4xl font-bold text-white mb-2">✨ MAGIC 8 BALL ✨</h1>
+        <p className="flex text-gray-300 text-sm">Ask a question and shake to reveal your destiny</p>
+        <div className="flex w-full max-w-md z-10 mt-4">
+          <input
+            type="text"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            onKeyPress={onKeyPress}
+            placeholder="What would you like to know?"
+            className="w-full px-4 py-4 text-base bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+            disabled={isShaking}
+          />
+        </div>
       </div>
 
       {/* Ball */}
-      <div ref={ballRef} className="z-10 flex justify-center items-center my-6">
+      <div ref={ballRef} className="z-10 flex justify-center items-center">
         <div
           className={`relative cursor-pointer transition-all duration-300 ${
             isShaking ? 'animate-bounce' : 'hover:rotate-3'
@@ -131,8 +129,8 @@ export default function Magic8BallUI({
       </div>
 
       {/* Instructions */}
-      <div className="z-10 text-center w-full max-w-md mb-4">
-        <div className="bg-white/10 backdrop-blur-md rounded-lg px-6 py-2 border border-white/20">
+      <div className="flex flex-col gap-12 z-10 text-center w-full max-w-md">
+        <div className="flex justify-center bg-white/10 backdrop-blur-md rounded-lg px-6 py-2 border border-white/20">
           <p className="text-white text-sm">
             {!hasShaken ? (
               <>💫 Type your question above and tap the ball</>
@@ -145,10 +143,7 @@ export default function Magic8BallUI({
             )}
           </p>
         </div>
-      </div>
-
-      {/* Buttons */}
-      <div className={`w-full max-w-md z-10 mb-8 grid gap-2 ${showAnswer && answer && !isShaking ? 'grid-cols-2' : 'grid-cols-1'}`}>
+        <div className={`flex w-full max-w-md z-10 pb-4 grid gap-2 ${showAnswer && answer && !isShaking ? 'grid-cols-2' : 'grid-cols-1'}`}>
         <button
           onClick={onShake}
           disabled={!question.trim() || isShaking}
@@ -173,6 +168,8 @@ export default function Magic8BallUI({
           </>
         )}
       </div>
+      </div>
+      
 
       <style jsx>{`
         @keyframes float {
