@@ -7,17 +7,6 @@ import Magic8BallUI from './Magic8BallUI';
 import { generateResultImage, getRandomAnswer, createCastTextOptions } from '../utils/magic8Utils';
 // import { useMintNFT } from '../hooks/useMintNFT';
 
-// Define the Farcaster SDK types
-declare global {
-  interface Window {
-    sdk?: {
-      actions?: {
-        composeCast?: (params: { text: string; embeds: (File | string)[] }) => Promise<void>;
-      };
-    };
-  }
-}
-
 export default function Magic8BallContainer() {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
@@ -80,17 +69,12 @@ export default function Magic8BallContainer() {
       const imageBlob: Blob | null = await generateResultImage(ballRef, answer, question);
       const castTexts: string[] = createCastTextOptions(question, answer);
       const randomText: string = castTexts[Math.floor(Math.random() * castTexts.length)];
-      const embeds: (File | string)[] = [];
   
-      if (imageBlob) {
-        const imageFile: File = new File([imageBlob], 'magic-8-ball-result.png', { type: 'image/png' });
-        embeds.push(imageFile);
-      }
-      embeds.push(window.location.href);
-  
-      // Check for custom SDK (e.g., Farcaster)
-      if (typeof window !== 'undefined' && window.sdk?.actions?.composeCast) {
-        await window.sdk.actions.composeCast({ text: randomText, embeds });
+      // Use the imported SDK directly
+      if (sdk?.actions?.composeCast) {
+        // Farcaster SDK expects specific embed format - only strings (URLs)
+        const embedUrls: string[] = [window.location.href];
+        await sdk.actions.composeCast({ text: randomText, embeds: embedUrls as [] | [string] | [string, string] });
       } 
       // Try native sharing with files
       else if (navigator.share && imageBlob) {

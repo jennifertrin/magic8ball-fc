@@ -139,7 +139,7 @@ export default function Magic8BallUI({
             ) : isShaking ? (
               <>🔮 The spirits are consulting...</>
             ) : showAnswer && answer ? (
-              <>✨ Share your result or mint it as an NFT!</>
+              <>✨ Share your result</>
             ) : (
               <>✨ Ask another question or shake again</>
             )}
@@ -148,7 +148,7 @@ export default function Magic8BallUI({
       </div>
 
       {/* Buttons */}
-      <div className="w-full max-w-md z-10 mb-8 grid gap-3 sm:grid-cols-1 ${showAnswer && answer ? 'grid-cols-3 md:grid-cols-3' : 'grid-cols-1'}">
+      <div className="w-full max-w-md z-10 mb-8 grid gap-3 ${showAnswer && answer ? 'grid-cols-2 md:grid-cols-2' : 'grid-cols-1'}">
         <button
           onClick={onShake}
           disabled={!question.trim() || isShaking}
