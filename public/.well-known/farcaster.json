@@ -7,6 +7,7 @@
     "frame": {
       "version": "1",
       "name": "Magic 8 Ball",
+      "description": "Ask a question and shake to reveal your destiny.",
       "iconUrl": "https://magic8ball.space/crystal-ball.png",
       "homeUrl": "https://magic8ball.space",
       "imageUrl": "https://magic8ball.space/screenshot.png",
@@ -18,6 +19,17 @@
       ],
       "requiredCapabilities": [
         "actions.composeCast"
+      ],
+      "ogTitle": "Magic 8 Ball",
+      "ogDescription": "Ask a question and shake to reveal your destiny.",
+      "ogImageUrl": "https://magic8ball.space/screenshot.png",
+      "primaryCategory": "entertainment",
+      "tags": [ 
+        "magic8ball",
+        "entertainment",
+        "social",
+        "fun",
+        "prediction"
       ]
     }
   }
