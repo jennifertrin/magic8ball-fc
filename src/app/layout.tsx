@@ -30,7 +30,8 @@ export const metadata: Metadata = {
         title: "Ask a Question",
         action: {
           type: "launch_frame",
-          name: "Magic 8 Ball"
+          name: "Magic 8 Ball",
+          url: "https://magic8ball.space"
         }
       }
     }),
