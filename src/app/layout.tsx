@@ -26,7 +26,8 @@ export const metadata: Metadata = {
     "fc:frame:image": process.env.NEXT_PUBLIC_HOST + "/screenshot.png",
     "og:image": process.env.NEXT_PUBLIC_HOST + "/screenshot.png",
     "fc:frame:button:1": "Ask a Question",
-    "fc:frame:button:1:link": "https://magic8ball.space"
+    "fc:frame:button:1:action": "link",
+    "fc:frame:button:1:target": "https://magic8ball.space"
   },
 };
 
