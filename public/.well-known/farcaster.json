@@ -2,11 +2,11 @@
     "frame": {
       "version": "1",
       "name": "Magic 8 Ball",
-      "iconUrl": "https://yoink.party/logo.png",
+      "iconUrl": "https://magic8ball.space/crystal-ball.png",
       "homeUrl": "https://magic8ball.space",
-      "imageUrl": "https://yoink.party/framesV2/opengraph-image",
+      "imageUrl": "https://magic8ball.space/screenshot.png",
       "buttonTitle": "🚩 Start",
-      "splashImageUrl": "https://yoink.party/logo.png",
+      "splashImageUrl": "https://magic8ball.space/crystal-ball.png",
       "splashBackgroundColor": "#f5f0ec",
       "requiredChains": [
         "eip155:8453"
