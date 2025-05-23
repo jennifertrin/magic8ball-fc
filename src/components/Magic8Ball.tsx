@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { sdk } from '@farcaster/frame-sdk';
 // import { useAccount } from 'wagmi';
 import Magic8BallUI from './Magic8BallUI';
 import { generateResultImage, getRandomAnswer, createCastTextOptions } from '../utils/magic8Utils';
@@ -41,7 +42,21 @@ export default function Magic8BallContainer() {
     return particles;
   }, []);
 
-  useEffect(() => setIsClient(true), []);
+  useEffect(() => {
+    setIsClient(true);
+    
+    // Initialize Farcaster SDK
+    const initializeSdk = async () => {
+      try {
+        await sdk.actions.ready();
+        console.log('Farcaster SDK initialized successfully');
+      } catch (error) {
+        console.error('Failed to initialize Farcaster SDK:', error);
+      }
+    };
+    
+    initializeSdk();
+  }, []);
 
   const handleShake = () => {
     if (!question.trim() || isShaking) return;
