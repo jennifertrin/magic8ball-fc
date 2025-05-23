@@ -6,7 +6,7 @@ export const getRandomAnswer = () => {
 };
 
 export const createCastTextOptions = (question, answer) => [
-  `🔮 The mystical forces have spoken! I asked "${question}" and got "${answer}" ✨\n\nWhat question would you ask the Magic 8 Ball? 🎱`,
+  `🔮 The mystical forces have spoken! I asked, "${question}" and got "${answer}" ✨\n\nWhat question would you ask the Magic 8 Ball? 🎱`,
   `✨ Just consulted the digital oracle! My question: "${question}"\n🎱 The answer: "${answer}"\n\nTry your luck with the Magic 8 Ball! 🔮`,
   `🌟 The cosmic energies revealed: "${answer}" when I asked "${question}"\n\nWhat wisdom would you seek? Ask the Magic 8 Ball! 🎱✨`,
   `🎱 Magic 8 Ball wisdom of the day!\n\nQ: "${question}"\nA: "${answer}"\n\nThe universe has spoken! What's your question? 🔮`,
