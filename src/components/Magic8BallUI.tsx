@@ -148,7 +148,7 @@ export default function Magic8BallUI({
       </div>
 
       {/* Buttons */}
-      <div className="w-full max-w-md z-10 mb-8 grid gap-3 ${showAnswer && answer ? 'grid-cols-2 md:grid-cols-2' : 'grid-cols-1'}">
+      <div className={`w-full max-w-md z-10 mb-8 grid gap-2 ${showAnswer && answer && !isShaking ? 'grid-cols-2' : 'grid-cols-1'}`}>
         <button
           onClick={onShake}
           disabled={!question.trim() || isShaking}
