@@ -19,11 +19,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Magic 8 Ball",
     description: "Ask the mystical Magic 8 Ball your questions",
-    images: ["/og-image.png"],
+    images: ["/screenshot.png"],
   },
   other: {
     "fc:frame": "vNext",
-    "fc:frame:image": process.env.NEXT_PUBLIC_HOST + "/og-image.png",
+    "fc:frame:image": process.env.NEXT_PUBLIC_HOST + "/screenshot.png",
+    "og:image": process.env.NEXT_PUBLIC_HOST + "/screenshot.png",
     "fc:frame:button:1": "Ask a Question",
     "fc:frame:post_url": process.env.NEXT_PUBLIC_HOST + "/api/frame",
   },
