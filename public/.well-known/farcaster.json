@@ -1,10 +1,10 @@
 {
+   "accountAssociation": {
+      "header": "eyJmaWQiOjEyMDM0LCJ0eXBlIjoiY3VzdG9keSIsImtleSI6IjB4MzBDM2UwZDIxZDQ1NzVGNzE3RDU5RkM1QkQxMDIxRDk2RGU5RWQ0RiJ9",
+      "payload": "eyJkb21haW4iOiJ3d3cubWFnaWM4YmFsbC5zcGFjZSJ9",
+      "signature": "MHgxNWY0OGE1NzA1ZmRlNTNhODEyY2ZiYjM2MThmZWIyN2I0NTdhYjQyMjQwYWRjMGRjZmVmNjJmZjk0YmQyNjI4MjViZDc1NGFkYjA0NWRmYmZiNzYwZmM3ZTc5NTJhMzZhN2VjYjk3Nzk4MTdhOTFhMzI5MGJkY2JlMzc3ZWVkNjFj"
+    },
     "frame": {
-      "accountAssociation": {
-          "header": "eyJmaWQiOjEyMDM0LCJ0eXBlIjoiY3VzdG9keSIsImtleSI6IjB4MzBDM2UwZDIxZDQ1NzVGNzE3RDU5RkM1QkQxMDIxRDk2RGU5RWQ0RiJ9",
-          "payload": "eyJkb21haW4iOiJ3d3cubWFnaWM4YmFsbC5zcGFjZSJ9",
-          "signature": "MHgxNWY0OGE1NzA1ZmRlNTNhODEyY2ZiYjM2MThmZWIyN2I0NTdhYjQyMjQwYWRjMGRjZmVmNjJmZjk0YmQyNjI4MjViZDc1NGFkYjA0NWRmYmZiNzYwZmM3ZTc5NTJhMzZhN2VjYjk3Nzk4MTdhOTFhMzI5MGJkY2JlMzc3ZWVkNjFj"
-      },
       "version": "1",
       "name": "Magic 8 Ball",
       "iconUrl": "https://magic8ball.space/crystal-ball.png",
