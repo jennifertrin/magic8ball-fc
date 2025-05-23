@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@farcaster/frame-sdk": "^0.0.50",
+    "@tanstack/react-query": "^5.76.2",
     "framer-motion": "^12.12.1",
     "next": "15.3.2",
     "react": "^19.0.0",
