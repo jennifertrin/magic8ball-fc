@@ -16,9 +16,10 @@ interface NFTMetadata {
 
 export const useMintNFT = () => {
   const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { address } = useAccount();
   
-  const { writeContract, data: hash, isPending: isMinting } = useWriteContract();
+  const { writeContract, data: hash, isPending: isMinting, error: writeError } = useWriteContract();
   
   const { isLoading: isConfirming, isSuccess: isMinted } = useWaitForTransactionReceipt({
     hash,
@@ -33,14 +34,18 @@ export const useMintNFT = () => {
 
   const uploadToVercelBlob = async (imageBlob: Blob, metadata: NFTMetadata): Promise<string> => {
     try {
+      console.log('Starting upload to Vercel Blob...');
+      
       // Upload the image to Vercel Blob
       const imageUrl = await uploadImageToVercelBlob(imageBlob, `magic8ball-${Date.now()}.png`);
+      console.log('Image uploaded:', imageUrl);
       
       // Update metadata with the actual image URL
       metadata.image = imageUrl;
       
       // Upload metadata to Vercel Blob
       const metadataUrl = await uploadMetadataToVercelBlob(metadata, `metadata-${Date.now()}.json`);
+      console.log('Metadata uploaded:', metadataUrl);
       
       return metadataUrl;
     } catch (error) {
@@ -50,26 +55,42 @@ export const useMintNFT = () => {
   };
 
   const mint = async (question: string, answer: string, ballRef: React.RefObject<HTMLDivElement | null>) => {
+    // Clear any previous errors
+    setError(null);
+
     if (!address) {
-      throw new Error('Wallet not connected');
+      const errorMsg = 'Wallet not connected';
+      setError(errorMsg);
+      throw new Error(errorMsg);
     }
 
     if (!ballRef.current) {
-      throw new Error('Ball reference not available');
+      const errorMsg = 'Ball reference not available';
+      setError(errorMsg);
+      throw new Error(errorMsg);
     }
 
     if (!mintingFee) {
-      throw new Error('Unable to fetch minting fee');
+      const errorMsg = 'Minting fee not available. Please wait for contract to load.';
+      setError(errorMsg);
+      throw new Error(errorMsg);
     }
+
+    console.log('Starting mint process...');
+    console.log('Address:', address);
+    console.log('Minting fee:', mintingFee);
+    console.log('Contract address:', NFT_CONTRACT_ADDRESS);
 
     try {
       setIsUploading(true);
       
       // Generate the result image
+      console.log('Generating result image...');
       const imageBlob = await generateResultImage(ballRef, answer, question);
       if (!imageBlob) {
         throw new Error('Failed to generate image');
       }
+      console.log('Image generated successfully');
 
       // Create NFT metadata
       const metadata: NFTMetadata = {
@@ -93,10 +114,13 @@ export const useMintNFT = () => {
       };
 
       // Upload to Vercel Blob
+      console.log('Uploading to Vercel Blob...');
       const metadataURI = await uploadToVercelBlob(imageBlob, metadata);
+      console.log('Upload complete. Metadata URI:', metadataURI);
       
       // Mint the NFT with only the tokenURI parameter, as per contract specification
-      writeContract({
+      console.log('Calling writeContract...');
+      const result = writeContract({
         address: NFT_CONTRACT_ADDRESS as `0x${string}`,
         abi: NFT_CONTRACT_ABI,
         functionName: 'mint',
@@ -104,8 +128,13 @@ export const useMintNFT = () => {
         value: mintingFee,
       });
 
+      console.log('writeContract called, result:', result);
+      return result;
+
     } catch (error) {
       console.error('Error minting NFT:', error);
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred';
+      setError(errorMsg);
       throw error;
     } finally {
       setIsUploading(false);
@@ -117,6 +146,10 @@ export const useMintNFT = () => {
     return `${Number(mintingFee) / 1e18} ETH`;
   };
 
+  const resetError = () => {
+    setError(null);
+  };
+
   return {
     mint,
     isPending: isMinting || isUploading || isConfirming,
@@ -124,5 +157,10 @@ export const useMintNFT = () => {
     hash,
     mintingFee: formatMintingFee(),
     rawMintingFee: mintingFee,
+    error: error || writeError?.message,
+    resetError,
+    isUploading,
+    isMinting,
+    isConfirming,
   };
 };
