@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Magic8BallNFT is ERC721URIStorage, Ownable {
-    uint256 public mintingFee = 0.01 ether;
+    uint256 public mintingFee = 0.002 ether;
     uint256 public nextTokenId = 1;
 
     event Minted(address indexed minter, uint256 indexed tokenId, string tokenURI);
