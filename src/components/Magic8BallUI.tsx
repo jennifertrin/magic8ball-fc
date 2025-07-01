@@ -161,30 +161,32 @@ export default function Magic8BallUI({
           </div>
         )}
 
-      <div className={`flex w-full max-w-md z-10 pb-4 grid gap-2 ${showAnswer && answer && !isShaking ? 'grid-cols-1' : 'grid-cols-1'}`}>
-        <button
-          onClick={onShake}
-          disabled={!question.trim() || isShaking}
-          className="w-full px-6 py-3 text-base bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
-        >
-          {isShaking ? 'Shaking...' : 'Shake the Ball'}
-        </button>
-        {showAnswer && answer && !isShaking && (
-          <>
+      <div className="flex w-full max-w-md z-10 pb-4 flex-col gap-2">
+        <div className={`grid gap-2 ${showAnswer && answer && !isShaking ? 'grid-cols-2' : 'grid-cols-1'}`}>
+          <button
+            onClick={onShake}
+            disabled={!question.trim() || isShaking}
+            className="w-full px-6 py-3 text-base bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
+          >
+            {isShaking ? 'Shaking...' : 'Shake the Ball'}
+          </button>
+          {showAnswer && answer && !isShaking && (
             <button
               onClick={onShare}
               className="w-full px-6 py-3 text-base bg-gradient-to-r from-green-500 to-teal-500 text-white font-medium rounded-full shadow-lg hover:shadow-xl"
             >
               Share
             </button>
-            <button
-              onClick={onMint}
-              disabled={!isConnected || isMinting}
-              className="w-full px-6 py-3 text-base bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium rounded-full shadow-lg hover:shadow-xl disabled:opacity-50"
-            >
-              {isMinting ? 'Minting...' : `Mint NFT (${mintingFee})`}
-            </button>
-          </>
+          )}
+        </div>
+        {showAnswer && answer && !isShaking && (
+          <button
+            onClick={onMint}
+            disabled={!isConnected || isMinting}
+            className="w-full px-6 py-3 text-base bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium rounded-full shadow-lg hover:shadow-xl disabled:opacity-50"
+          >
+            {isMinting ? 'Minting...' : `Mint NFT (${mintingFee})`}
+          </button>
         )}
       </div>
       </div>
