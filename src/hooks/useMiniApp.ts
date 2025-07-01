@@ -40,18 +40,8 @@ export const useMiniApp = () => {
   }, []);
 
   const connectWallet = async () => {
-    if (isInitialized && !initializationError) {
-      try {
-        await autoConnectWallet();
-      } catch (error) {
-        console.error('Failed to connect wallet:', error);
-        // Fallback to manual connection
         if (connectors.length > 0) {
           connect({ connector: connectors[0] });
-        }
-      }
-    } else if (connectors.length > 0) {
-      connect({ connector: connectors[0] });
     }
   };
 
