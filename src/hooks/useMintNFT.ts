@@ -120,7 +120,7 @@ export const useMintNFT = () => {
       
       // Mint the NFT with only the tokenURI parameter, as per contract specification
       console.log('Calling writeContract...');
-      const result = writeContract({
+      writeContract({
         address: NFT_CONTRACT_ADDRESS as `0x${string}`,
         abi: NFT_CONTRACT_ABI,
         functionName: 'mint',
@@ -128,8 +128,8 @@ export const useMintNFT = () => {
         value: mintingFee,
       });
 
-      console.log('writeContract called, result:', result);
-      return result;
+      console.log('writeContract called successfully');
+      // Note: The transaction hash will be available in the 'hash' state from useWriteContract
 
     } catch (error) {
       console.error('Error minting NFT:', error);
