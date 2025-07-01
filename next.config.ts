@@ -1,31 +1,24 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  async headers() {
-    return [
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: ['imagedelivery.net', 'public.blob.vercel-storage.com'],
+    // OR use the newer remotePatterns (recommended):
+    remotePatterns: [
       {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-        ],
+        protocol: 'https',
+        hostname: 'imagedelivery.net',
+        pathname: '/**',
       },
-    ];
+      {
+        protocol: 'https',
+        hostname: 'public.blob.vercel-storage.com',
+        pathname: '/**',
+      },
+    ],
   },
-  // Enable experimental features for better miniapp support
-  experimental: {
-    optimizePackageImports: ['@farcaster/miniapp-sdk', '@farcaster/miniapp-wagmi-connector'],
-  },
-};
+}
 
+module.exports = nextConfig
 export default nextConfig;
