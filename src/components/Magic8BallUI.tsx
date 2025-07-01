@@ -24,14 +24,10 @@ interface Magic8BallUIProps {
   onKeyPress: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onShare: () => void;
   onMint: () => void;
-  onConnectWallet: () => void;
-  onDisconnectWallet: () => void;
   isConnected: boolean;
   isMinting: boolean;
   isMinted: boolean;
-  address?: `0x${string}`;
   mintingFee?: string;
-  isMiniApp?: boolean;
 }
 
 export default function Magic8BallUI({
@@ -48,14 +44,10 @@ export default function Magic8BallUI({
   onKeyPress,
   onShare,
   onMint,
-  onConnectWallet,
-  onDisconnectWallet,
   isConnected,
   isMinting,
   isMinted,
-  address,
-  mintingFee = '0.01 ETH',
-  isMiniApp
+  mintingFee = '0.01 ETH'
 }: Magic8BallUIProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-between bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden p-4">

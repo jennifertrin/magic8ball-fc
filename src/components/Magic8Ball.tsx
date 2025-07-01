@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { useAccount } from 'wagmi';
 import Magic8BallUI from './Magic8BallUI';
 import { generateResultImage, getRandomAnswer, createCastTextOptions } from '../utils/magic8Utils';
 import { useMintNFT } from '../hooks/useMintNFT';
@@ -16,9 +16,7 @@ export default function Magic8BallContainer() {
   const [isClient, setIsClient] = useState(false);
   const ballRef = useRef<HTMLDivElement>(null);
 
-  const { isConnected, address } = useAccount();
-  const { connect, connectors } = useConnect();
-  const { disconnect } = useDisconnect();
+  const { isConnected} = useAccount();
   const { mint, isPending: isMinting, isSuccess: isMinted, mintingFee } = useMintNFT();
   const { isMiniApp, isInitialized, connectWallet, composeCast } = useMiniApp();
 
@@ -130,21 +128,6 @@ export default function Magic8BallContainer() {
     }
   };
 
-  const handleConnectWallet = () => {
-    if (isMiniApp && isInitialized) {
-      // In mini-app, try to auto-connect
-      connectWallet().catch(() => {
-        alert('Failed to connect wallet. Please try again.');
-      });
-    } else if (connectors.length > 0) {
-      connect({ connector: connectors[0] });
-    }
-  };
-
-  const handleDisconnectWallet = () => {
-    disconnect();
-  };
-
   // Don't render anything until client-side hydration is complete
   if (!isClient) {
     return null;
@@ -165,14 +148,10 @@ export default function Magic8BallContainer() {
       onKeyPress={handleKeyPress}
       onShare={handleShare}
       onMint={handleMintNFT}
-      onConnectWallet={handleConnectWallet}
-      onDisconnectWallet={handleDisconnectWallet}
       isConnected={isConnected}
       isMinting={isMinting}
       isMinted={isMinted}
-      address={address}
       mintingFee={mintingFee}
-      isMiniApp={isMiniApp}
     />
   );
 }
