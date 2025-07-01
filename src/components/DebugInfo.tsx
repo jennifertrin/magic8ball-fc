@@ -1,13 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { isMiniAppEnvironment } from '../lib/miniapp';
 
 interface DebugInfo {
   hostname: string;
   userAgent: string;
   url: string;
-  isMiniApp: boolean;
   timestamp: string;
 }
 
@@ -19,7 +17,6 @@ export default function DebugInfo() {
       hostname: window.location.hostname,
       userAgent: navigator.userAgent,
       url: window.location.href,
-      isMiniApp: isMiniAppEnvironment(),
       timestamp: new Date().toISOString(),
     };
 
@@ -36,7 +33,6 @@ export default function DebugInfo() {
       <div className="font-bold mb-2">Debug Info</div>
       <div className="space-y-1">
         <div><strong>Host:</strong> {debugInfo.hostname}</div>
-        <div><strong>MiniApp:</strong> {debugInfo.isMiniApp ? 'Yes' : 'No'}</div>
         <div><strong>User Agent:</strong> {debugInfo.userAgent.substring(0, 30)}...</div>
         <div><strong>URL:</strong> {debugInfo.url.substring(0, 40)}...</div>
       </div>

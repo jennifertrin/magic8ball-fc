@@ -15,32 +15,9 @@ export const initializeMiniApp = async () => {
 // Get the mini-app SDK instance
 export const getMiniAppSDK = () => sdk;
 
-// Check if we're in a mini-app environment
-export const isMiniAppEnvironment = () => {
-  try {
-    if (typeof window === 'undefined') {
-      return false;
-    }
-    
-    // Check for Farcaster-specific indicators
-    const isFarcasterHost = window.location.hostname.includes('farcaster.xyz');
-    const isFarcasterUserAgent = navigator.userAgent.includes('farcaster');
-    const hasFarcasterFrame = window.location.search.includes('frame=');
-    
-    return isFarcasterHost || isFarcasterUserAgent || hasFarcasterFrame;
-  } catch (error) {
-    console.error('Error checking mini-app environment:', error);
-    return false;
-  }
-};
-
-// Auto-connect wallet if in mini-app environment
+// Always attempt to connect wallet using mini-app SDK
 export const autoConnectWallet = async () => {
   try {
-    if (!isMiniAppEnvironment()) {
-      return false;
-    }
-
     const sdkInstance = getMiniAppSDK();
     const isReady = await sdkInstance.actions.ready();
     return isReady;
