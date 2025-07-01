@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from 'wagmi';
 import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from '../utils/nftContract';
 import { generateResultImage } from '../utils/magic8Utils';
@@ -19,11 +19,47 @@ export const useMintNFT = () => {
   const [error, setError] = useState<string | null>(null);
   const { address } = useAccount();
   
-  const { writeContract, data: hash, isPending: isMinting, error: writeError } = useWriteContract();
+  const { writeContract, data: hash, isPending: isMinting, error: writeError } = useWriteContract({
+    onSuccess: (data) => {
+      console.log('Transaction submitted successfully:', data);
+    },
+    onError: (error) => {
+      console.error('Transaction failed:', error);
+      console.error('Error details:', {
+        message: error.message,
+        cause: error.cause,
+        stack: error.stack
+      });
+    }
+  });
   
   const { isLoading: isConfirming, isSuccess: isMinted } = useWaitForTransactionReceipt({
     hash,
   });
+
+  // Debug effect to track any write errors
+  useEffect(() => {
+    if (writeError) {
+      console.error('Write error detected:', writeError);
+      console.error('Write error details:', {
+        message: writeError.message,
+        cause: writeError.cause,
+        name: writeError.name
+      });
+    }
+  }, [writeError]);
+
+  // Debug effect to track hash changes
+  useEffect(() => {
+    if (hash) {
+      console.log('Transaction hash received:', hash);
+    }
+  }, [hash]);
+
+  // Debug effect to track minting status
+  useEffect(() => {
+    console.log('Minting status - isPending:', isMinting, 'isConfirming:', isConfirming, 'isSuccess:', isMinted);
+  }, [isMinting, isConfirming, isMinted]);
 
   // Read the minting fee from the contract (using public variable instead of function)
   const { data: mintingFee } = useReadContract({
@@ -31,6 +67,21 @@ export const useMintNFT = () => {
     abi: NFT_CONTRACT_ABI,
     functionName: 'mintingFee',
   });
+
+  // Test contract connection with nextTokenId read
+  const { data: nextTokenId } = useReadContract({
+    address: NFT_CONTRACT_ADDRESS as `0x${string}`,
+    abi: NFT_CONTRACT_ABI,
+    functionName: 'nextTokenId',
+  });
+
+  // Debug contract read values
+  useEffect(() => {
+    console.log('Contract read values:', {
+      mintingFee: mintingFee?.toString(),
+      nextTokenId: nextTokenId?.toString()
+    });
+  }, [mintingFee, nextTokenId]);
 
   const uploadToVercelBlob = async (imageBlob: Blob, metadata: NFTMetadata): Promise<string> => {
     try {
@@ -120,15 +171,28 @@ export const useMintNFT = () => {
       
       // Mint the NFT with only the tokenURI parameter, as per contract specification
       console.log('Calling writeContract...');
-      writeContract({
-        address: NFT_CONTRACT_ADDRESS as `0x${string}`,
-        abi: NFT_CONTRACT_ABI,
-        functionName: 'mint',
-        args: [metadataURI] as const, // Only tokenURI parameter needed
-        value: mintingFee,
+      console.log('Contract details:', {
+        address: NFT_CONTRACT_ADDRESS,
+        mintingFee: mintingFee?.toString(),
+        metadataURI,
+        userAddress: address
       });
-
-      console.log('writeContract called successfully');
+      
+      try {
+        writeContract({
+          address: NFT_CONTRACT_ADDRESS as `0x${string}`,
+          abi: NFT_CONTRACT_ABI,
+          functionName: 'mint',
+          args: [metadataURI] as const,
+          value: mintingFee,
+        });
+        
+        console.log('writeContract called successfully');
+      } catch (writeErr) {
+        console.error('writeContract threw an error:', writeErr);
+        throw writeErr;
+      }
+      
       // Note: The transaction hash will be available in the 'hash' state from useWriteContract
 
     } catch (error) {
