@@ -24,11 +24,11 @@ export const useMintNFT = () => {
     hash,
   });
 
-  // Read the minting fee from the contract
+  // Read the minting fee from the contract (using public variable instead of function)
   const { data: mintingFee } = useReadContract({
     address: NFT_CONTRACT_ADDRESS as `0x${string}`,
     abi: NFT_CONTRACT_ABI,
-    functionName: 'getMintingFee',
+    functionName: 'mintingFee',
   });
 
   const uploadToVercelBlob = async (imageBlob: Blob, metadata: NFTMetadata): Promise<string> => {
@@ -95,12 +95,12 @@ export const useMintNFT = () => {
       // Upload to Vercel Blob
       const metadataURI = await uploadToVercelBlob(imageBlob, metadata);
       
-      // Mint the NFT with question and answer parameters, including the fee
+      // Mint the NFT with only the tokenURI parameter, as per contract specification
       writeContract({
         address: NFT_CONTRACT_ADDRESS as `0x${string}`,
         abi: NFT_CONTRACT_ABI,
         functionName: 'mint',
-        args: [address, metadataURI, question, answer],
+        args: [metadataURI] as const, // Only tokenURI parameter needed
         value: mintingFee,
       });
 
@@ -125,4 +125,4 @@ export const useMintNFT = () => {
     mintingFee: formatMintingFee(),
     rawMintingFee: mintingFee,
   };
-}; 
+};
