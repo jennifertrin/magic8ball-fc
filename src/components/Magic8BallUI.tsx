@@ -25,11 +25,13 @@ interface Magic8BallUIProps {
   onShare: () => void;
   onMint: () => void;
   onConnectWallet: () => void;
+  onDisconnectWallet: () => void;
   isConnected: boolean;
   isMinting: boolean;
   isMinted: boolean;
   address?: `0x${string}`;
   mintingFee?: string;
+  isMiniApp?: boolean;
 }
 
 export default function Magic8BallUI({
@@ -47,11 +49,13 @@ export default function Magic8BallUI({
   onShare,
   onMint,
   onConnectWallet,
+  onDisconnectWallet,
   isConnected,
   isMinting,
   isMinted,
   address,
-  mintingFee = '0.01 ETH'
+  mintingFee = '0.01 ETH',
+  isMiniApp
 }: Magic8BallUIProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-between bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden p-4">
@@ -86,18 +90,34 @@ export default function Magic8BallUI({
         <p className="flex text-gray-300 text-sm">Ask a question and shake to reveal your destiny</p>
         
         {/* Wallet Connection Status */}
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex flex-col items-center gap-2 mb-2">
+          {isMiniApp && (
+            <div className="flex items-center gap-2 text-blue-400 text-xs">
+              <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+              <span>Farcaster Mini App</span>
+            </div>
+          )}
           {isConnected ? (
-            <div className="flex items-center gap-2 text-green-400 text-sm">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span>Connected: {address?.slice(0, 6)}...{address?.slice(-4)}</span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-green-400 text-sm">
+                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                <span>Connected: {address?.slice(0, 6)}...{address?.slice(-4)}</span>
+              </div>
+              {!isMiniApp && (
+                <button
+                  onClick={onDisconnectWallet}
+                  className="px-2 py-1 text-xs bg-red-600 text-white font-medium rounded-full shadow-lg hover:shadow-xl transition-all"
+                >
+                  Disconnect
+                </button>
+              )}
             </div>
           ) : (
             <button
               onClick={onConnectWallet}
               className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-full shadow-lg hover:shadow-xl transition-all"
             >
-              Connect Wallet
+              {isMiniApp ? 'Connect Wallet' : 'Connect Wallet'}
             </button>
           )}
         </div>
@@ -173,18 +193,6 @@ export default function Magic8BallUI({
             )}
           </p>
         </div>
-        
-        {/* Minting Fee Info */}
-        {showAnswer && answer && !isShaking && (
-          <div className="bg-amber-500/20 backdrop-blur-md rounded-lg px-6 py-3 border border-amber-500/30">
-            <p className="text-amber-400 text-sm font-medium">
-              💰 NFT Minting Fee: {mintingFee}
-            </p>
-            <p className="text-amber-300 text-xs mt-1">
-              This fee covers gas costs and helps support the project
-            </p>
-          </div>
-        )}
         
         {/* Success Message */}
         {isMinted && (
