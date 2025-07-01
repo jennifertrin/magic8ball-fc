@@ -19,19 +19,7 @@ export const useMintNFT = () => {
   const [error, setError] = useState<string | null>(null);
   const { address } = useAccount();
   
-  const { writeContract, data: hash, isPending: isMinting, error: writeError } = useWriteContract({
-    onSuccess: (data) => {
-      console.log('Transaction submitted successfully:', data);
-    },
-    onError: (error) => {
-      console.error('Transaction failed:', error);
-      console.error('Error details:', {
-        message: error.message,
-        cause: error.cause,
-        stack: error.stack
-      });
-    }
-  });
+  const { writeContract, data: hash, isPending: isMinting, error: writeError } = useWriteContract();
   
   const { isLoading: isConfirming, isSuccess: isMinted } = useWaitForTransactionReceipt({
     hash,
