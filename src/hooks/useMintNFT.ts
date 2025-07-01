@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from 'wagmi';
-import { parseEther } from 'viem';
 import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from '../utils/nftContract';
 import { generateResultImage } from '../utils/magic8Utils';
 import { uploadImageToVercelBlob, uploadMetadataToVercelBlob } from '../utils/vercelBlob';

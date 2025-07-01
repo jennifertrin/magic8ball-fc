@@ -1,10 +1,18 @@
-import { put } from '@vercel/blob';
-
 export interface BlobUploadResult {
   url: string;
   pathname: string;
   contentType: string;
   contentDisposition: string;
+}
+
+export interface NFTMetadata {
+  name: string;
+  description: string;
+  image: string;
+  attributes: Array<{
+    trait_type: string;
+    value: string;
+  }>;
 }
 
 export const uploadToVercelBlob = async (
@@ -42,7 +50,7 @@ export const uploadImageToVercelBlob = async (
 };
 
 export const uploadMetadataToVercelBlob = async (
-  metadata: any,
+  metadata: NFTMetadata,
   filename: string = 'metadata.json'
 ): Promise<string> => {
   const metadataBlob = new Blob([JSON.stringify(metadata, null, 2)], {
