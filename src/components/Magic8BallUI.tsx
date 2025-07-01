@@ -45,7 +45,7 @@ export default function Magic8BallUI({
   onMint,
   isMinting,
   isMinted,
-  mintingFee = '0.01 ETH'
+  mintingFee = '0.002 ETH'
 }: Magic8BallUIProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-between bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden p-4">
