@@ -19,9 +19,11 @@ export const generateResultImage = async (ref, answer, question) => {
   try {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = 1200;
-    canvas.height = 630;
+    // Square format for better NFT display
+    canvas.width = 800;
+    canvas.height = 800;
 
+    // Create gradient background
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     gradient.addColorStop(0, '#0f172a');
     gradient.addColorStop(0.3, '#581c87');
@@ -31,8 +33,9 @@ export const generateResultImage = async (ref, answer, question) => {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    // Add stars
     ctx.fillStyle = '#6366f1';
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 50; i++) {
       const x = Math.random() * canvas.width;
       const y = Math.random() * canvas.height;
       const size = Math.random() * 3 + 1;
@@ -41,27 +44,45 @@ export const generateResultImage = async (ref, answer, question) => {
       ctx.fill();
     }
 
+    // Add mystical orbs
     ctx.fillStyle = 'rgba(139, 92, 246, 0.1)';
     ctx.beginPath();
-    ctx.arc(200, 150, 80, 0, Math.PI * 2);
+    ctx.arc(150, 120, 60, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = 'rgba(99, 102, 241, 0.1)';
     ctx.beginPath();
-    ctx.arc(canvas.width - 150, canvas.height - 120, 100, 0, Math.PI * 2);
+    ctx.arc(canvas.width - 120, 150, 80, 0, Math.PI * 2);
     ctx.fill();
 
-    const ballCenterX = 300;
-    const ballCenterY = canvas.height / 2;
-    const ballRadius = 140;
+    // Title at the top
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 36px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('✨ Magic 8 Ball', canvas.width / 2, 80);
 
+    // Decorative line
+    ctx.strokeStyle = '#6366f1';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(canvas.width / 2 - 100, 100);
+    ctx.lineTo(canvas.width / 2 + 100, 100);
+    ctx.stroke();
+
+    // Magic 8 Ball - centered and larger
+    const ballCenterX = canvas.width / 2;
+    const ballCenterY = 320;
+    const ballRadius = 120;
+
+    // Ball shadow
     ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
     ctx.beginPath();
-    ctx.arc(ballCenterX + 8, ballCenterY + 8, ballRadius, 0, Math.PI * 2);
+    ctx.arc(ballCenterX + 6, ballCenterY + 6, ballRadius, 0, Math.PI * 2);
     ctx.fill();
 
+    // Ball gradient
     const ballGradient = ctx.createRadialGradient(
-      ballCenterX - 50, ballCenterY - 50, 0,
+      ballCenterX - 40, ballCenterY - 40, 0,
       ballCenterX, ballCenterY, ballRadius
     );
     ballGradient.addColorStop(0, '#4b5563');
@@ -74,24 +95,28 @@ export const generateResultImage = async (ref, answer, question) => {
     ctx.arc(ballCenterX, ballCenterY, ballRadius, 0, Math.PI * 2);
     ctx.fill();
 
+    // Ball highlights
     ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
     ctx.beginPath();
-    ctx.arc(ballCenterX - 60, ballCenterY - 60, 30, 0, Math.PI * 2);
+    ctx.arc(ballCenterX - 50, ballCenterY - 50, 25, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
     ctx.beginPath();
-    ctx.arc(ballCenterX - 40, ballCenterY - 40, 15, 0, Math.PI * 2);
+    ctx.arc(ballCenterX - 35, ballCenterY - 35, 12, 0, Math.PI * 2);
     ctx.fill();
 
-    const windowRadius = 55;
-    const windowCenterY = ballCenterY + 25;
+    // Answer window
+    const windowRadius = 50;
+    const windowCenterY = ballCenterY + 20;
 
+    // Window glow
     ctx.fillStyle = 'rgba(99, 102, 241, 0.4)';
     ctx.beginPath();
-    ctx.arc(ballCenterX, windowCenterY, windowRadius + 10, 0, Math.PI * 2);
+    ctx.arc(ballCenterX, windowCenterY, windowRadius + 8, 0, Math.PI * 2);
     ctx.fill();
 
+    // Window gradient
     const windowGradient = ctx.createRadialGradient(
       ballCenterX, windowCenterY, 0,
       ballCenterX, windowCenterY, windowRadius
@@ -105,8 +130,9 @@ export const generateResultImage = async (ref, answer, question) => {
     ctx.arc(ballCenterX, windowCenterY, windowRadius, 0, Math.PI * 2);
     ctx.fill();
 
+    // Answer text in window
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 16px Inter, sans-serif';
+    ctx.font = 'bold 14px Inter, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
@@ -116,7 +142,7 @@ export const generateResultImage = async (ref, answer, question) => {
     for (const word of words) {
       const testLine = currentLine + (currentLine ? ' ' : '') + word;
       const metrics = ctx.measureText(testLine);
-      if (metrics.width > windowRadius * 1.6 && currentLine) {
+      if (metrics.width > windowRadius * 1.4 && currentLine) {
         lines.push(currentLine);
         currentLine = word;
       } else {
@@ -125,40 +151,32 @@ export const generateResultImage = async (ref, answer, question) => {
     }
     if (currentLine) lines.push(currentLine);
 
-    const lineHeight = 18;
+    const lineHeight = 16;
     const startY = windowCenterY - ((lines.length - 1) * lineHeight) / 2;
     lines.forEach((line, index) => {
       ctx.fillText(line, ballCenterX, startY + index * lineHeight);
     });
 
-    const contentStartX = ballCenterX + ballRadius + 60;
-    const contentWidth = canvas.width - contentStartX - 60;
-
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 48px Inter, sans-serif';
-    ctx.textAlign = 'left';
-    ctx.fillText('✨ Magic 8 Ball', contentStartX, 120);
-
-    ctx.strokeStyle = '#6366f1';
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.moveTo(contentStartX, 150);
-    ctx.lineTo(contentStartX + 200, 150);
-    ctx.stroke();
-
+    // Question section below the ball
+    const questionStartY = ballCenterY + ballRadius + 60;
+    
     ctx.fillStyle = '#e5e7eb';
-    ctx.font = 'bold 24px Inter, sans-serif';
-    ctx.fillText('Question:', contentStartX, 220);
+    ctx.font = 'bold 20px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Question:', canvas.width / 2, questionStartY);
 
-    ctx.font = '20px Inter, sans-serif';
+    // Question text
+    ctx.font = '16px Inter, sans-serif';
     ctx.fillStyle = '#f3f4f6';
     const questionWords = question.split(' ');
     const questionLines = [];
     let currentQuestionLine = '';
+    const maxWidth = canvas.width - 80;
+    
     for (const word of questionWords) {
       const testLine = currentQuestionLine + (currentQuestionLine ? ' ' : '') + word;
       const metrics = ctx.measureText(testLine);
-      if (metrics.width > contentWidth - 20 && currentQuestionLine) {
+      if (metrics.width > maxWidth && currentQuestionLine) {
         questionLines.push(currentQuestionLine);
         currentQuestionLine = word;
       } else {
@@ -166,24 +184,28 @@ export const generateResultImage = async (ref, answer, question) => {
       }
     }
     if (currentQuestionLine) questionLines.push(currentQuestionLine);
+    
     questionLines.forEach((line, index) => {
-      ctx.fillText(`"${line}"`, contentStartX, 260 + index * 25);
+      ctx.fillText(`"${line}"`, canvas.width / 2, questionStartY + 35 + index * 20);
     });
 
-    const answerStartY = 260 + questionLines.length * 25 + 40;
+    // Answer section
+    const answerStartY = questionStartY + 35 + questionLines.length * 20 + 30;
+    
     ctx.fillStyle = '#10b981';
-    ctx.font = 'bold 24px Inter, sans-serif';
-    ctx.fillText('Answer:', contentStartX, answerStartY);
+    ctx.font = 'bold 20px Inter, sans-serif';
+    ctx.fillText('Answer:', canvas.width / 2, answerStartY);
 
-    ctx.font = 'bold 28px Inter, sans-serif';
+    ctx.font = 'bold 22px Inter, sans-serif';
     ctx.fillStyle = '#ffffff';
     const answerWords = answer.split(' ');
     const answerLines = [];
     let currentAnswerLine = '';
+    
     for (const word of answerWords) {
       const testLine = currentAnswerLine + (currentAnswerLine ? ' ' : '') + word;
       const metrics = ctx.measureText(testLine);
-      if (metrics.width > contentWidth - 20 && currentAnswerLine) {
+      if (metrics.width > maxWidth && currentAnswerLine) {
         answerLines.push(currentAnswerLine);
         currentAnswerLine = word;
       } else {
@@ -191,17 +213,14 @@ export const generateResultImage = async (ref, answer, question) => {
       }
     }
     if (currentAnswerLine) answerLines.push(currentAnswerLine);
+    
     answerLines.forEach((line, index) => {
-      ctx.fillText(`"${line}"`, contentStartX, answerStartY + 40 + index * 32);
+      ctx.fillText(`"${line}"`, canvas.width / 2, answerStartY + 35 + index * 25);
     });
 
-    ctx.font = '40px Inter, sans-serif';
-    ctx.fillStyle = '#a855f7';
-    ctx.textAlign = 'center';
-
+    // Bottom text
+    ctx.font = '14px Inter, sans-serif';
     ctx.fillStyle = '#6366f1';
-    ctx.font = '16px Inter, sans-serif';
-    ctx.textAlign = 'center';
     ctx.fillText('Ask the universe your questions! 🔮', canvas.width / 2, canvas.height - 30);
 
     return new Promise((resolve) => {
