@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import Magic8Ball from '../components/Magic8Ball';
+import DebugInfo from '../components/DebugInfo';
 
 export default function Home() {
   return (
@@ -15,6 +16,9 @@ export default function Home() {
       }>
         <Magic8Ball />
       </Suspense>
+      
+      {/* Debug information - only show in development */}
+      {process.env.NODE_ENV === 'development' && <DebugInfo />}
     </div>
   );
 }

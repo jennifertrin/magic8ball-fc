@@ -18,7 +18,7 @@ export default function Magic8BallContainer() {
 
   const { isConnected} = useAccount();
   const { mint, isPending: isMinting, isSuccess: isMinted, mintingFee } = useMintNFT();
-  const { isMiniApp, isInitialized, connectWallet, composeCast } = useMiniApp();
+  const { isMiniApp, isInitialized, initializationError, connectWallet, composeCast } = useMiniApp();
 
   const staticParticles = useMemo(() => {
     if (!isClient) return [];
@@ -37,6 +37,18 @@ export default function Magic8BallContainer() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // Log miniapp status for debugging
+  useEffect(() => {
+    if (isClient) {
+      console.log('MiniApp Status:', {
+        isMiniApp,
+        isInitialized,
+        initializationError,
+        isConnected
+      });
+    }
+  }, [isClient, isMiniApp, isInitialized, initializationError, isConnected]);
 
   const handleShake = () => {
     if (!question.trim() || isShaking) return;
@@ -62,11 +74,13 @@ export default function Magic8BallContainer() {
       const randomText: string = castTexts[Math.floor(Math.random() * castTexts.length)];
   
       // Use the Mini App SDK for sharing
-      if (isMiniApp && isInitialized) {
+      if (isMiniApp && isInitialized && !initializationError) {
         try {
           const embedUrls: string[] = [window.location.href];
           await composeCast(randomText, embedUrls);
-        } catch {
+          return; // Successfully shared via miniapp
+        } catch (error) {
+          console.log('Miniapp sharing failed, falling back to native sharing:', error);
           // Fallback to native sharing
         }
       }
@@ -93,14 +107,23 @@ export default function Magic8BallContainer() {
         await navigator.clipboard.writeText(`${randomText} ${window.location.href}`);
         alert('Result copied to clipboard!');
       }
-    } catch {
-      // (error intentionally ignored to fix ESLint error)
+    } catch (error) {
+      console.error('Sharing failed:', error);
+      // Fallback to clipboard
+      try {
+        const castTexts: string[] = createCastTextOptions(question, answer);
+        const randomText: string = castTexts[Math.floor(Math.random() * castTexts.length)];
+        await navigator.clipboard.writeText(`${randomText} ${window.location.href}`);
+        alert('Result copied to clipboard!');
+      } catch {
+        alert('Failed to share result');
+      }
     }
   };
 
   const handleMintNFT = async () => {
     if (!isConnected) {
-      if (isMiniApp && isInitialized) {
+      if (isMiniApp && isInitialized && !initializationError) {
         // In mini-app, try to auto-connect
         try {
           await connectWallet();
@@ -112,7 +135,8 @@ export default function Magic8BallContainer() {
               alert('Please connect your wallet to mint NFTs');
             }
           }, 1000);
-        } catch {
+        } catch (error) {
+          console.error('Failed to connect wallet in miniapp:', error);
           alert('Please connect your wallet to mint NFTs');
         }
       } else {
@@ -123,7 +147,8 @@ export default function Magic8BallContainer() {
 
     try {
       await mint(question, answer, ballRef);
-    } catch {
+    } catch (error) {
+      console.error('Failed to mint NFT:', error);
       alert('Failed to mint NFT. Please try again.');
     }
   };

@@ -18,8 +18,16 @@ export const getMiniAppSDK = () => sdk;
 // Check if we're in a mini-app environment
 export const isMiniAppEnvironment = () => {
   try {
-    return typeof window !== 'undefined' && 
-           window.location.hostname.includes('farcaster.xyz');
+    if (typeof window === 'undefined') {
+      return false;
+    }
+    
+    // Check for Farcaster-specific indicators
+    const isFarcasterHost = window.location.hostname.includes('farcaster.xyz');
+    const isFarcasterUserAgent = navigator.userAgent.includes('farcaster');
+    const hasFarcasterFrame = window.location.search.includes('frame=');
+    
+    return isFarcasterHost || isFarcasterUserAgent || hasFarcasterFrame;
   } catch (error) {
     console.error('Error checking mini-app environment:', error);
     return false;
