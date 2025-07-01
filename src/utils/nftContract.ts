@@ -1,4 +1,4 @@
-export const NFT_CONTRACT_ADDRESS = '0x0000000000000000000000000000000000000000'; // Replace with actual deployed contract address
+export const NFT_CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS;// Replace with actual deployed contract address
 
 export const NFT_CONTRACT_ABI = [
   {
