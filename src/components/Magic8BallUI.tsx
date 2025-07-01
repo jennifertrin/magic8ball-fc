@@ -23,7 +23,13 @@ interface Magic8BallUIProps {
   onShake: () => void;
   onKeyPress: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onShare: () => void;
-  // onMint: () => void;
+  onMint: () => void;
+  onConnectWallet: () => void;
+  isConnected: boolean;
+  isMinting: boolean;
+  isMinted: boolean;
+  address?: `0x${string}`;
+  mintingFee?: string;
 }
 
 export default function Magic8BallUI({
@@ -39,7 +45,13 @@ export default function Magic8BallUI({
   onShake,
   onKeyPress,
   onShare,
-  // onMint
+  onMint,
+  onConnectWallet,
+  isConnected,
+  isMinting,
+  isMinted,
+  address,
+  mintingFee = '0.01 ETH'
 }: Magic8BallUIProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-between bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden p-4">
@@ -72,6 +84,24 @@ export default function Magic8BallUI({
       <div className="flex flex-col gap-2 items-center text-center z-10 pt-4">
         <h1 className="flex text-4xl font-bold text-white mb-2">✨ MAGIC 8 BALL ✨</h1>
         <p className="flex text-gray-300 text-sm">Ask a question and shake to reveal your destiny</p>
+        
+        {/* Wallet Connection Status */}
+        <div className="flex items-center gap-2 mb-2">
+          {isConnected ? (
+            <div className="flex items-center gap-2 text-green-400 text-sm">
+              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+              <span>Connected: {address?.slice(0, 6)}...{address?.slice(-4)}</span>
+            </div>
+          ) : (
+            <button
+              onClick={onConnectWallet}
+              className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white font-medium rounded-full shadow-lg hover:shadow-xl transition-all"
+            >
+              Connect Wallet
+            </button>
+          )}
+        </div>
+
         <div className="flex w-full max-w-md z-10 mt-2">
           <input
             type="text"
@@ -137,37 +167,60 @@ export default function Magic8BallUI({
             ) : isShaking ? (
               <>🔮 The spirits are consulting...</>
             ) : showAnswer && answer ? (
-              <>✨ Share your result</>
+              <>✨ Share your result or mint as NFT</>
             ) : (
               <>✨ Ask another question or shake again</>
             )}
           </p>
         </div>
-        <div className={`flex w-full max-w-md z-10 pb-4 grid gap-2 ${showAnswer && answer && !isShaking ? 'grid-cols-2' : 'grid-cols-1'}`}>
-        <button
-          onClick={onShake}
-          disabled={!question.trim() || isShaking}
-          className="w-full px-6 py-3 text-base bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
-        >
-          {isShaking ? 'Shaking...' : 'Shake the Ball'}
-        </button>
+        
+        {/* Minting Fee Info */}
         {showAnswer && answer && !isShaking && (
-          <>
-            <button
-              onClick={onShare}
-              className="w-full px-6 py-3 text-base bg-gradient-to-r from-green-500 to-teal-500 text-white font-medium rounded-full shadow-lg hover:shadow-xl"
-            >
-              Share
-            </button>
-            {/* <button
-              onClick={onMint}
-              className="w-full px-6 py-3 text-base bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium rounded-full shadow-lg hover:shadow-xl"
-            >
-              Mint NFT
-            </button> */}
-          </>
+          <div className="bg-amber-500/20 backdrop-blur-md rounded-lg px-6 py-3 border border-amber-500/30">
+            <p className="text-amber-400 text-sm font-medium">
+              💰 NFT Minting Fee: {mintingFee}
+            </p>
+            <p className="text-amber-300 text-xs mt-1">
+              This fee covers gas costs and helps support the project
+            </p>
+          </div>
         )}
-      </div>
+        
+        {/* Success Message */}
+        {isMinted && (
+          <div className="bg-green-500/20 backdrop-blur-md rounded-lg px-6 py-3 border border-green-500/30">
+            <p className="text-green-400 text-sm font-medium">
+              🎉 NFT minted successfully! Check your wallet.
+            </p>
+          </div>
+        )}
+
+        <div className={`flex w-full max-w-md z-10 pb-4 grid gap-2 ${showAnswer && answer && !isShaking ? 'grid-cols-2' : 'grid-cols-1'}`}>
+          <button
+            onClick={onShake}
+            disabled={!question.trim() || isShaking}
+            className="w-full px-6 py-3 text-base bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50"
+          >
+            {isShaking ? 'Shaking...' : 'Shake the Ball'}
+          </button>
+          {showAnswer && answer && !isShaking && (
+            <>
+              <button
+                onClick={onShare}
+                className="w-full px-6 py-3 text-base bg-gradient-to-r from-green-500 to-teal-500 text-white font-medium rounded-full shadow-lg hover:shadow-xl"
+              >
+                Share
+              </button>
+              <button
+                onClick={onMint}
+                disabled={!isConnected || isMinting}
+                className="w-full px-6 py-3 text-base bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium rounded-full shadow-lg hover:shadow-xl disabled:opacity-50"
+              >
+                {isMinting ? 'Minting...' : `Mint NFT (${mintingFee})`}
+              </button>
+            </>
+          )}
+        </div>
       </div>
       
 
@@ -200,9 +253,6 @@ export default function Magic8BallUI({
             opacity: 1;
             transform: scale(1);
           }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.5s ease-out;
         }
       `}</style>
     </div>

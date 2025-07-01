@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { sdk } from '@farcaster/frame-sdk';
-// import { useAccount } from 'wagmi';
+import { useAccount, useConnect } from 'wagmi';
 import Magic8BallUI from './Magic8BallUI';
 import { generateResultImage, getRandomAnswer, createCastTextOptions } from '../utils/magic8Utils';
-// import { useMintNFT } from '../hooks/useMintNFT';
+import { useMintNFT } from '../hooks/useMintNFT';
 
 export default function Magic8BallContainer() {
   const [question, setQuestion] = useState('');
@@ -16,8 +16,9 @@ export default function Magic8BallContainer() {
   const [isClient, setIsClient] = useState(false);
   const ballRef = useRef<HTMLDivElement>(null);
 
-  // const { isConnected } = useAccount();
-  // const { mint, isPending: isMinting, isSuccess: isMinted } = useMintNFT();
+  const { isConnected, address } = useAccount();
+  const { connect, connectors } = useConnect();
+  const { mint, isPending: isMinting, isSuccess: isMinted, mintingFee } = useMintNFT();
 
   const staticParticles = useMemo(() => {
     const particles = [];
@@ -114,27 +115,25 @@ export default function Magic8BallContainer() {
     }
   };
 
-  // const handleMintNFT = async () => {
-  //   if (!isConnected) {
-  //     alert('Please connect your wallet first');
-  //     return;
-  //   }
+  const handleMintNFT = async () => {
+    if (!isConnected) {
+      alert('Please connect your wallet first');
+      return;
+    }
 
-  //   try {
-  //     const imageBlob = await generateResultImage(ballRef, answer, question);
-  //     if (!imageBlob) {
-  //       throw new Error('Failed to generate image');
-  //     }
+    try {
+      await mint(question, answer, ballRef);
+    } catch (error) {
+      console.error('Error minting NFT:', error);
+      alert('Failed to mint NFT. Please try again.');
+    }
+  };
 
-  //     // Upload image to IPFS or your preferred storage
-  //     // const imageURI = 'ipfs://...'; // Replace with actual image upload logic
-
-  //     // await mint(question, answer, imageURI);
-  //   } catch (error) {
-  //     console.error('Error minting NFT:', error);
-  //     alert('Failed to mint NFT. Please try again.');
-  //   }
-  // };
+  const handleConnectWallet = () => {
+    if (connectors.length > 0) {
+      connect({ connector: connectors[0] });
+    }
+  };
 
   return (
     <Magic8BallUI
@@ -150,10 +149,13 @@ export default function Magic8BallContainer() {
       onShake={handleShake}
       onKeyPress={handleKeyPress}
       onShare={handleShare}
-      // onMint={handleMintNFT}
-      // isConnected={isConnected}
-      // isMinting={isMinting}
-      // isMinted={isMinted}
+      onMint={handleMintNFT}
+      onConnectWallet={handleConnectWallet}
+      isConnected={isConnected}
+      isMinting={isMinting}
+      isMinted={isMinted}
+      address={address}
+      mintingFee={mintingFee}
     />
   );
 }

@@ -6,11 +6,18 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "compile": "npx hardhat compile",
+    "deploy:testnet": "npx hardhat run deploy.js --network baseSepolia",
+    "deploy:mainnet": "npx hardhat run deploy.js --network base",
+    "verify:testnet": "npx hardhat verify --network baseSepolia",
+    "verify:mainnet": "npx hardhat verify --network base"
   },
   "dependencies": {
     "@farcaster/frame-sdk": "^0.0.50",
+    "@farcaster/frame-wagmi-connector": "^1.0.0",
     "@tanstack/react-query": "^5.76.2",
+    "@vercel/blob": "^0.25.0",
     "framer-motion": "^12.12.1",
     "next": "15.3.2",
     "react": "^19.0.0",
@@ -23,13 +30,31 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.9",
+    "@nomicfoundation/hardhat-ethers": "^3.0.9",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.13",
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.14",
+    "@openzeppelin/contracts": "^5.3.0",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@typechain/ethers-v6": "^0.5.1",
+    "@typechain/hardhat": "^9.1.0",
+    "@types/chai": "^4.3.20",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.19.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "chai": "^4.5.0",
+    "dotenv": "^16.4.5",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
+    "ethers": "^6.14.4",
+    "hardhat": "^2.25.0",
+    "hardhat-gas-reporter": "^1.0.10",
+    "solidity-coverage": "^0.8.16",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typechain": "^8.3.2",
+    "typescript": "^5.8.3"
   }
 }
