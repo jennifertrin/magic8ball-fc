@@ -182,7 +182,7 @@ export default function Magic8BallUI({
         {showAnswer && answer && !isShaking && (
           <button
             onClick={onMint}
-            disabled={!isConnected || isMinting}
+            disabled={isMinting}
             className="w-full px-6 py-3 text-base bg-gradient-to-r from-amber-500 to-orange-500 text-white font-medium rounded-full shadow-lg hover:shadow-xl disabled:opacity-50"
           >
             {isMinting ? 'Minting...' : `Mint NFT (${mintingFee})`}

@@ -17,6 +17,7 @@ export default function Magic8BallContainer() {
   const ballRef = useRef<HTMLDivElement>(null);
 
   const { isConnected} = useAccount();
+  console.log(isConnected);
   const { mint, isPending: isMinting, isSuccess: isMinted, mintingFee } = useMintNFT();
   const { isInitialized, initializationError, connectWallet, composeCast } = useMiniApp();
 
