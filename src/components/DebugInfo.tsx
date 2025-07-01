@@ -3,11 +3,19 @@
 import { useEffect, useState } from 'react';
 import { isMiniAppEnvironment } from '../lib/miniapp';
 
+interface DebugInfo {
+  hostname: string;
+  userAgent: string;
+  url: string;
+  isMiniApp: boolean;
+  timestamp: string;
+}
+
 export default function DebugInfo() {
-  const [debugInfo, setDebugInfo] = useState<any>(null);
+  const [debugInfo, setDebugInfo] = useState<DebugInfo | null>(null);
 
   useEffect(() => {
-    const info = {
+    const info: DebugInfo = {
       hostname: window.location.hostname,
       userAgent: navigator.userAgent,
       url: window.location.href,
@@ -34,4 +42,4 @@ export default function DebugInfo() {
       </div>
     </div>
   );
-} 
+}

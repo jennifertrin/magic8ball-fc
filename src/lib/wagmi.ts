@@ -17,6 +17,7 @@ const isMiniAppEnvironment = () => {
     
     return isFarcasterHost || isFarcasterUserAgent || hasFarcasterFrame;
   } catch (error) {
+    console.error('Error checking miniapp environment:', error);
     return false;
   }
 };
