@@ -146,7 +146,8 @@ export default function Magic8BallContainer() {
     }
 
     try {
-      await mint(question, answer, ballRef);
+      const minting = await mint(question, answer, ballRef);
+      console.log(minting);
     } catch (error) {
       console.error('Failed to mint NFT:', error);
       alert('Failed to mint NFT. Please try again.');
