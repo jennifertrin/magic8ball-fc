@@ -23,6 +23,8 @@ export default function Magic8BallContainer() {
   const { isMiniApp, isInitialized, connectWallet, composeCast } = useMiniApp();
 
   const staticParticles = useMemo(() => {
+    if (!isClient) return [];
+    
     const particles = [];
     for (let i = 0; i < 20; i++) {
       const angle = (i / 20) * Math.PI * 2;
@@ -32,7 +34,7 @@ export default function Magic8BallContainer() {
       particles.push({ id: i, left: `${x}%`, top: `${y}%`, duration: 3 + (i % 4), delay: (i % 5) * 0.4 });
     }
     return particles;
-  }, []);
+  }, [isClient]);
 
   useEffect(() => {
     setIsClient(true);
@@ -100,7 +102,7 @@ export default function Magic8BallContainer() {
 
   const handleMintNFT = async () => {
     if (!isConnected) {
-      if (isMiniApp) {
+      if (isMiniApp && isInitialized) {
         // In mini-app, try to auto-connect
         try {
           await connectWallet();
@@ -129,7 +131,7 @@ export default function Magic8BallContainer() {
   };
 
   const handleConnectWallet = () => {
-    if (isMiniApp) {
+    if (isMiniApp && isInitialized) {
       // In mini-app, try to auto-connect
       connectWallet().catch(() => {
         alert('Failed to connect wallet. Please try again.');
@@ -142,6 +144,11 @@ export default function Magic8BallContainer() {
   const handleDisconnectWallet = () => {
     disconnect();
   };
+
+  // Don't render anything until client-side hydration is complete
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <Magic8BallUI

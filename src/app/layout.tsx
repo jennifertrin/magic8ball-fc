@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Magic 8 Ball",
   description: "Ask the mystical Magic 8 Ball your questions",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000'),
   openGraph: {
     title: "Magic 8 Ball",
     description: "Ask the mystical Magic 8 Ball your questions",
@@ -53,7 +54,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-full`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-full`} suppressHydrationWarning={true}>
         <Providers>
           {children}
         </Providers>

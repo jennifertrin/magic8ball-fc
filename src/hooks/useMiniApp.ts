@@ -5,35 +5,46 @@ import { initializeMiniApp, getMiniAppSDK, isMiniAppEnvironment, autoConnectWall
 export const useMiniApp = () => {
   const [isMiniApp, setIsMiniApp] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const { isConnected } = useAccount();
   const { connect, connectors } = useConnect();
 
   useEffect(() => {
+    // Ensure we're on the client side
+    setIsClient(true);
+    
     const checkAndInitialize = async () => {
-      const miniAppEnv = isMiniAppEnvironment();
-      setIsMiniApp(miniAppEnv);
+      try {
+        const miniAppEnv = isMiniAppEnvironment();
+        setIsMiniApp(miniAppEnv);
 
-      if (miniAppEnv) {
-        try {
-          await initializeMiniApp();
-          setIsInitialized(true);
-          
-          // Auto-connect wallet in mini-app environment
-          const connected = await autoConnectWallet();
-          if (connected) {
-            console.log('Wallet auto-connected in mini-app environment');
+        if (miniAppEnv) {
+          try {
+            await initializeMiniApp();
+            setIsInitialized(true);
+            
+            // Auto-connect wallet in mini-app environment
+            const connected = await autoConnectWallet();
+            if (connected) {
+              console.log('Wallet auto-connected in mini-app environment');
+            }
+          } catch (error) {
+            console.error('Failed to initialize mini-app:', error);
+            // Don't throw here, just log the error
           }
-        } catch (error) {
-          console.error('Failed to initialize mini-app:', error);
         }
+      } catch (error) {
+        console.error('Error checking mini-app environment:', error);
       }
     };
 
-    checkAndInitialize();
+    // Use a small delay to ensure proper hydration
+    const timer = setTimeout(checkAndInitialize, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const connectWallet = async () => {
-    if (isMiniApp) {
+    if (isMiniApp && isInitialized) {
       try {
         await autoConnectWallet();
       } catch (error) {
@@ -46,8 +57,8 @@ export const useMiniApp = () => {
   };
 
   const sendTransaction = async () => {
-    if (!isMiniApp) {
-      throw new Error('Transaction sending is only available in mini-app environment');
+    if (!isMiniApp || !isInitialized) {
+      throw new Error('Transaction sending is only available in initialized mini-app environment');
     }
 
     try {
@@ -62,8 +73,8 @@ export const useMiniApp = () => {
   };
 
   const composeCast = async (text: string, embeds?: string[]) => {
-    if (!isMiniApp) {
-      throw new Error('Cast composition is only available in mini-app environment');
+    if (!isMiniApp || !isInitialized) {
+      throw new Error('Cast composition is only available in initialized mini-app environment');
     }
 
     try {
@@ -79,8 +90,8 @@ export const useMiniApp = () => {
   };
 
   return {
-    isMiniApp,
-    isInitialized,
+    isMiniApp: isClient ? isMiniApp : false,
+    isInitialized: isClient ? isInitialized : false,
     isConnected,
     connectWallet,
     sendTransaction,
