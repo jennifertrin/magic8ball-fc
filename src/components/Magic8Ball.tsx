@@ -173,7 +173,6 @@ export default function Magic8BallContainer() {
       onKeyPress={handleKeyPress}
       onShare={handleShare}
       onMint={handleMintNFT}
-      isConnected={isConnected}
       isMinting={isMinting}
       isMinted={isMinted}
       mintingFee={mintingFee}

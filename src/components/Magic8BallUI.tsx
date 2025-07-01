@@ -24,7 +24,6 @@ interface Magic8BallUIProps {
   onKeyPress: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onShare: () => void;
   onMint: () => void;
-  isConnected: boolean;
   isMinting: boolean;
   isMinted: boolean;
   mintingFee?: string;
@@ -44,7 +43,6 @@ export default function Magic8BallUI({
   onKeyPress,
   onShare,
   onMint,
-  isConnected,
   isMinting,
   isMinted,
   mintingFee = '0.01 ETH'
